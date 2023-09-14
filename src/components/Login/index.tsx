@@ -20,16 +20,18 @@ export default () => {
   const [page, setPage] = useState(Page.Account);
 
   useEffect(() => {
-    if (state.account) {
-      setPage(Page.IMAP);
+    if (state.smtp) {
+      setPage(Page.Loading);
       return;
     }
+
     if (state.imap) {
       setPage(Page.SMTP);
       return;
     }
-    if (state.account && state.imap && state.smtp) {
-      setPage(Page.Loading);
+
+    if (state.account) {
+      setPage(Page.IMAP);
       return;
     }
   }, [state.account, state.imap, state.smtp]);
