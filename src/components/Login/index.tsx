@@ -1,5 +1,5 @@
-import { useContext, useEffect, useReducer, useState } from "react";
-import { AppContext, LoginContext } from "../../context/state";
+import { useEffect, useReducer, useState } from "react";
+import { LoginContext } from "../../context/state";
 import { LoginReducer } from "../../context/reducer";
 import SMTP from "./SMTP";
 import IMAP from "./IMAP";
@@ -14,7 +14,7 @@ enum Page {
 }
 
 export default () => {
-  const { state: appState, dispatch: appDispatch } = useContext(AppContext);
+  // const { state: appState, dispatch: appDispatch } = useContext(AppContext);
   const [state, dispatch] = useReducer(LoginReducer, {});
 
   const [page, setPage] = useState(Page.Account);
@@ -37,16 +37,18 @@ export default () => {
   }, [state.account, state.imap, state.smtp]);
 
   return (
-    <LoginContext.Provider value={{ state, dispatch }}>
-      {page === Page.Account ? (
-        <Account />
-      ) : page === Page.IMAP ? (
-        <IMAP />
-      ) : page === Page.SMTP ? (
-        <SMTP />
-      ) : (
-        <Loading />
-      )}
-    </LoginContext.Provider>
+    <div className="container">
+      <LoginContext.Provider value={{ state, dispatch }}>
+        {page === Page.Account ? (
+          <Account />
+        ) : page === Page.IMAP ? (
+          <IMAP />
+        ) : page === Page.SMTP ? (
+          <SMTP />
+        ) : (
+          <Loading />
+        )}
+      </LoginContext.Provider>
+    </div>
   );
 };

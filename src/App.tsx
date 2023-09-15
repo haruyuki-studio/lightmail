@@ -32,8 +32,8 @@ function App() {
   }, [state.isLogin]);
 
   return (
-    <div className="container">
-      <div className="flex flex-row space-x-1">
+    <div className="w-full h-full">
+      <div className="flex flex-row space-x-1 h-full">
         <AppContext.Provider value={{ state, dispatch }}>
           {login ? (
             <>

@@ -35,11 +35,17 @@ export interface LoginAccountInfo {
   password: string;
 }
 
+export enum MailServerSecret {
+  TLS = "TLS",
+  AUTO = "AUTO",
+  NONE = "NONE",
+}
+
 export interface MailServerInfo {
   server: string;
   account?: LoginAccountInfo;
   port: number;
-  tls?: boolean;
+  secret?: MailServerSecret;
 }
 
 export type LoginAction =

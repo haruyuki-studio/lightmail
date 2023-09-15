@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { LoginContext } from "../../context/state";
+import { TEInput, TERipple } from "tw-elements-react";
 
 export default () => {
   const { dispatch } = useContext(LoginContext);
@@ -7,84 +8,62 @@ export default () => {
   const [password, setPassword] = useState("");
 
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+    <div className="flex items-center justify-center h-screen mx-auto">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
           className="mx-auto h-10 w-auto"
           src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-          alt="Your Company"
+          alt="Your Account"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Sign in to your account
+          <p>Setup your Account.</p>
+          <p>Step 1.</p>
         </h2>
       </div>
-
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form
-          className="space-y-6"
-          method="post"
-          onSubmit={(e) => {
-            e.preventDefault();
-            dispatch({
-              type: "SET_ACCOUNT",
-              account: { account, password },
-            });
-          }}
-        >
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium leading-6 text-gray-900"
+      <div className="block max-w-sm flex-auto rounded-lg bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+        <form>
+          {/* <!--E-mail input--> */}
+          <TEInput
+            type="email"
+            label="Email address"
+            value={account}
+            onChange={(e) => setAccount(e.target.value)}
+          >
+            <small
+              id="emailHelp"
+              className="absolute w-full text-neutral-500 dark:text-neutral-200"
             >
-              Email address
-            </label>
-            <div className="mt-2">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                placeholder="Your email account"
-                value={account}
-                onChange={(e) => setAccount(e.target.value)}
-              />
-            </div>
-          </div>
+              We'll never share your email with anyone else.
+            </small>
+          </TEInput>
 
-          <div>
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Password
-              </label>
-            </div>
-            <div className="mt-2">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                placeholder="Your email password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </div>
+          {/* <!--Password input--> */}
+          <TEInput
+            type="password"
+            label="Password"
+            className="mt-12 mb-6"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          ></TEInput>
 
-          <div>
+          {/* <!--Submit button--> */}
+          <TERipple rippleColor="light" className="w-full">
             <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              type="button"
+              className="block w-full rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]]"
+              onClick={() => {
+                dispatch({
+                  type: "SET_ACCOUNT",
+                  account: {
+                    account,
+                    password,
+                  },
+                });
+              }}
             >
               Next
             </button>
-          </div>
+          </TERipple>
         </form>
       </div>
     </div>
