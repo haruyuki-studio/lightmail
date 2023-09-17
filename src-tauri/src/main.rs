@@ -10,6 +10,27 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
+#[tauri::command]
+fn set_imap_info(server: String, port: u8, secret: String, account: String, password: String) {
+    println!(
+        "I was invoked from JS, with this message: {} {} {} {} {}",
+        server, port, secret, account, password
+    );
+}
+
+#[tauri::command]
+fn set_smtp_info(server: String, port: u8, secret: String, account: String, password: String) {
+    println!(
+        "I was invoked from JS, with this message: {} {} {} {} {}",
+        server, port, secret, account, password
+    );
+}
+
+#[tauri::command]
+async fn login() -> Result<String, String> {
+    Ok("".into())
+}
+
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
@@ -25,7 +46,12 @@ fn main() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            set_imap_info,
+            set_smtp_info,
+            login
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

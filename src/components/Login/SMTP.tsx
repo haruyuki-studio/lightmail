@@ -21,11 +21,14 @@ export default () => {
   const [selected, setSelected] = useState(secret[0]);
 
   useEffect(() => {
-    if (state.account) {
-      setAccount(state.account.account);
-      setPassword(state.account.password);
+    if (state.smtp) {
+      setAccount(state.smtp.account);
+      setPassword(state.smtp.password);
+      setServer(state.smtp.server);
+      setPort(state.smtp.port);
+      setSelected(state.smtp.secret);
     }
-  }, [state.account]);
+  }, [state.smtp]);
 
   return (
     <div className="flex items-center justify-center h-screen mx-auto">
@@ -195,10 +198,8 @@ export default () => {
                 dispatch({
                   type: "SET_SMTP",
                   smtp: {
-                    account: {
-                      account,
-                      password,
-                    },
+                    account,
+                    password,
                     server,
                     port,
                     secret: selected,

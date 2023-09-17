@@ -1,4 +1,10 @@
-import { AppAction, AppState, LoginAction, LoginState } from "./state";
+import {
+  AppAction,
+  AppState,
+  LoginAction,
+  LoginState,
+  LoginPage,
+} from "./state";
 
 export function reducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
@@ -33,11 +39,16 @@ export function LoginReducer(
 ): LoginState {
   switch (action.type) {
     case "SET_ACCOUNT":
-      return { ...state, account: action.account };
+      return {
+        ...state,
+        state: LoginPage.IMAP,
+        imap: action.imap,
+        smtp: action.smtp,
+      };
     case "SET_IMAP":
-      return { ...state, imap: action.imap };
+      return { ...state, state: LoginPage.SMTP, imap: action.imap };
     case "SET_SMTP":
-      return { ...state, smtp: action.smtp };
+      return { ...state, state: LoginPage.Loading, smtp: action.smtp };
     default:
       throw new Error();
   }

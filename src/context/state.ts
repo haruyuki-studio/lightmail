@@ -24,15 +24,18 @@ export interface AppStateType {
 export const AppContext = createContext<AppStateType>({} as AppStateType);
 
 // Login State
-export interface LoginState {
-  account?: LoginAccountInfo;
-  imap?: MailServerInfo;
-  smtp?: MailServerInfo;
+
+export enum LoginPage {
+  Account = "Account",
+  IMAP = "IMAP",
+  SMTP = "SMTP",
+  Loading = "Loading",
 }
 
-export interface LoginAccountInfo {
-  account: string;
-  password: string;
+export interface LoginState {
+  state: LoginPage;
+  imap: MailServerInfo;
+  smtp: MailServerInfo;
 }
 
 export enum MailServerSecret {
@@ -43,13 +46,14 @@ export enum MailServerSecret {
 
 export interface MailServerInfo {
   server: string;
-  account?: LoginAccountInfo;
+  account: string;
+  password: string;
   port: number;
-  secret?: MailServerSecret;
+  secret: MailServerSecret;
 }
 
 export type LoginAction =
-  | { type: "SET_ACCOUNT"; account: LoginAccountInfo }
+  | { type: "SET_ACCOUNT"; imap: MailServerInfo; smtp: MailServerInfo }
   | { type: "SET_IMAP"; imap: MailServerInfo }
   | { type: "SET_SMTP"; smtp: MailServerInfo };
 

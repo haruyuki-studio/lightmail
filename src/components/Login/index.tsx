@@ -1,49 +1,31 @@
 import { useEffect, useReducer, useState } from "react";
-import { LoginContext } from "../../context/state";
+import { LoginContext, LoginPage, LoginState } from "../../context/state";
 import { LoginReducer } from "../../context/reducer";
 import SMTP from "./SMTP";
 import IMAP from "./IMAP";
 import Account from "./Account";
 import Loading from "./Loading";
 
-enum Page {
-  Account = "Account",
-  IMAP = "IMAP",
-  SMTP = "SMTP",
-  Loading = "Loading",
-}
-
 export default () => {
   // const { state: appState, dispatch: appDispatch } = useContext(AppContext);
-  const [state, dispatch] = useReducer(LoginReducer, {});
+  const [state, dispatch] = useReducer(LoginReducer, {
+    state: LoginPage.Account,
+  } as LoginState);
 
-  const [page, setPage] = useState(Page.Account);
+  const [page, setPage] = useState(LoginPage.Account);
 
   useEffect(() => {
-    if (state.smtp) {
-      setPage(Page.Loading);
-      return;
-    }
-
-    if (state.imap) {
-      setPage(Page.SMTP);
-      return;
-    }
-
-    if (state.account) {
-      setPage(Page.IMAP);
-      return;
-    }
-  }, [state.account, state.imap, state.smtp]);
+    setPage(state.state);
+  }, [state.state]);
 
   return (
     <div className="container">
       <LoginContext.Provider value={{ state, dispatch }}>
-        {page === Page.Account ? (
+        {page === LoginPage.Account ? (
           <Account />
-        ) : page === Page.IMAP ? (
+        ) : page === LoginPage.IMAP ? (
           <IMAP />
-        ) : page === Page.SMTP ? (
+        ) : page === LoginPage.SMTP ? (
           <SMTP />
         ) : (
           <Loading />

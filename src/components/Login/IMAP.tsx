@@ -21,11 +21,14 @@ export default () => {
   const [selected, setSelected] = useState(secret[0]);
 
   useEffect(() => {
-    if (state.account) {
-      setAccount(state.account.account);
-      setPassword(state.account.password);
+    if (state.imap) {
+      setAccount(state.imap.account);
+      setPassword(state.imap.password);
+      setServer(state.imap.server);
+      setPort(state.imap.port);
+      setSelected(state.imap.secret);
     }
-  }, [state.account]);
+  }, [state.imap]);
 
   return (
     <div className="flex items-center justify-center h-screen mx-auto">
@@ -195,10 +198,8 @@ export default () => {
                 dispatch({
                   type: "SET_IMAP",
                   imap: {
-                    account: {
-                      account,
-                      password,
-                    },
+                    account,
+                    password,
                     server,
                     port,
                     secret: selected,
