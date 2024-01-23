@@ -1,18 +1,19 @@
 import { useContext, useEffect, useState } from "react";
 import { Mail } from "../utils/types";
 import { AppContext, AppState } from "../context/state";
+import { invoke } from "@tauri-apps/api";
 
 const folderKeep = ["Inbox", "Sent", "Drafts", "Trash"];
 
-function mailsByFolder(state: AppState, folder: string): Mail[] {
-  let mails: Mail[] = [];
-  for (let mail of state.mails) {
-    if (mail.folder === folder) {
-      mails.push(mail);
-    }
-  }
-  return mails;
-}
+// function mailsByFolder(state: AppState, folder: string): Mail[] {
+//   let mails: Mail[] = [];
+//   for (let mail of state.mails) {
+//     if (mail.folder === folder) {
+//       mails.push(mail);
+//     }
+//   }
+//   return mails;
+// }
 
 export default () => {
   const { state, dispatch } = useContext(AppContext);
@@ -25,35 +26,35 @@ export default () => {
     setCurrentFolder(state.currentFolder);
   }, [state.mails, state.currentFolder]);
 
-  useEffect(() => {
-    let folders: string[] = [];
-    for (let mail of mails) {
-      let isFound = false;
-      for (let f of folders) {
-        if (f == mail.folder) {
-          isFound = true;
-          break;
-        }
-      }
+  // useEffect(() => {
+  //   let folders: string[] = [];
+  //   for (let mail of mails) {
+  //     let isFound = false;
+  //     for (let f of folders) {
+  //       if (f == mail.folder) {
+  //         isFound = true;
+  //         break;
+  //       }
+  //     }
 
-      if (!isFound) {
-        folders.push(mail.folder);
-      }
-    }
+  //     if (!isFound) {
+  //       folders.push(mail.folder);
+  //     }
+  //   }
 
-    folders.sort((a, b) => {
-      if (folderKeep.includes(a) && folderKeep.includes(b)) {
-        return folderKeep.indexOf(a) - folderKeep.indexOf(b);
-      } else if (folderKeep.includes(a)) {
-        return -1;
-      } else if (folderKeep.includes(b)) {
-        return 1;
-      } else {
-        return a === b ? 0 : a < b ? -1 : 1;
-      }
-    });
-    setFolders(folders);
-  }, [mails]);
+  //   folders.sort((a, b) => {
+  //     if (folderKeep.includes(a) && folderKeep.includes(b)) {
+  //       return folderKeep.indexOf(a) - folderKeep.indexOf(b);
+  //     } else if (folderKeep.includes(a)) {
+  //       return -1;
+  //     } else if (folderKeep.includes(b)) {
+  //       return 1;
+  //     } else {
+  //       return a === b ? 0 : a < b ? -1 : 1;
+  //     }
+  //   });
+  //   setFolders(folders);
+  // }, [mails]);
 
   return (
     <div className="flex-none w-28">
@@ -78,7 +79,7 @@ export default () => {
                   {folder}
                 </p>
                 <p className="mr-2 text-sm">
-                  {mailsByFolder(state, folder).length}
+                  // {mailsByFolder(state, folder).length}
                 </p>
               </div>
             </li>

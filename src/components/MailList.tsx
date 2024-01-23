@@ -38,7 +38,8 @@ export default () => {
   const [mails, setMails] = useState(state.mails);
 
   useEffect(() => {
-    setMails(state.mails.filter((mail) => mail.folder === state.currentFolder));
+    // setMails(state.mails.filter((mail) => mail.folder === state.currentFolder));
+    setMails(state.mails);
   }, [state.mails, state.currentFolder]);
 
   return (
@@ -58,23 +59,23 @@ export default () => {
               <div className="min-w-0 flex-auto space-y-2 mt-2 mb-2">
                 <div className="flex justify-between items-center">
                   <p className="text-ellipsis overflow-hidden text-sm">
-                    {mail.sender}
+                    {mail.from!.address}
                   </p>
                   <p className="mr-2 whitespace-nowrap text-xs font-light">
-                    {formatDateTime(mail.date)}
+                    {formatDateTime(mail.date!)}
                   </p>
                 </div>
                 <div className="flex">
                   <div className="min-w-0 flex-auto flex-col space-y-2">
                     <p className="text-ellipsis overflow-hidden text-sm font-semibold">
-                      {mail.title}
+                      {mail.subject!}
                     </p>
                     <p className="text-ellipsis overflow-hidden max-w-full text-xs font-light">
-                      {mail.body}
+                      {mail.html}
                     </p>
                   </div>
                   <div className="contents">
-                    {mail.star ? (
+                    {true ? (
                       <img
                         className="w-4 h-4 ml-10 mr-2 mt-auto"
                         src={startIcon}

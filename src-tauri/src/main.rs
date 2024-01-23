@@ -1,6 +1,13 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod fetch;
+mod login;
+mod types;
+
+use fetch::fetch::fetch_box;
+use fetch::list::list_box;
+use login::login::imap_login;
 use tauri::Manager;
 use window_vibrancy::{apply_blur, apply_vibrancy, NSVisualEffectMaterial};
 
@@ -11,24 +18,54 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-fn set_imap_info(server: String, port: u8, secret: String, account: String, password: String) {
-    println!(
-        "I was invoked from JS, with this message: {} {} {} {} {}",
-        server, port, secret, account, password
-    );
+async fn login(
+    imap: types::ServerInfo,
+    smtp: types::ServerInfo,
+    state: tauri::State<'_, types::AppState>,
+) -> Result<types::LoginResponse, String> {
+    let s = state.imap.lock();
+
+    match imap_login(imap.clone()) {
+        Ok(x) => {
+            *s.unwrap() = Some(types::ImapState {
+                info: imap,
+                session: x.unwrap(),
+            });
+
+            Ok(types::LoginResponse {
+                message: String::from("Login successful"),
+            })
+        }
+        Err(_) => Err("Login failed".to_string()),
+    }
 }
 
 #[tauri::command]
-fn set_smtp_info(server: String, port: u8, secret: String, account: String, password: String) {
-    println!(
-        "I was invoked from JS, with this message: {} {} {} {} {}",
-        server, port, secret, account, password
-    );
+async fn list(
+    reference_name: Option<String>,
+    mailbox_pattern: Option<String>,
+    state: tauri::State<'_, types::AppState>,
+) -> Result<Vec<String>, String> {
+    println!("{:#?} {:#?}", reference_name, mailbox_pattern);
+    match list_box(
+        reference_name,
+        mailbox_pattern,
+        state.imap.lock().unwrap().as_mut().unwrap(),
+    ) {
+        Ok(x) => Ok(x),
+        Err(e) => Err(e),
+    }
 }
 
 #[tauri::command]
-async fn login() -> Result<String, String> {
-    Ok("".into())
+async fn fetch(state: tauri::State<'_, types::AppState>) -> Result<types::FetchResponse, String> {
+    match fetch_box(
+        state.imap.lock().unwrap().as_mut().unwrap(),
+        &String::from("INBOX"),
+    ) {
+        Ok(x) => Ok(types::FetchResponse { messages: x }),
+        Err(e) => Err(e),
+    }
 }
 
 fn main() {
@@ -46,12 +83,10 @@ fn main() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![
-            greet,
-            set_imap_info,
-            set_smtp_info,
-            login
-        ])
+        .manage(types::AppState {
+            imap: Default::default(),
+        })
+        .invoke_handler(tauri::generate_handler![greet, login, fetch, list])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

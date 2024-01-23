@@ -4,7 +4,7 @@ import { Mail } from "../utils/types";
 export interface AppState {
   currentMail: Mail | null;
   mails: Mail[];
-  folders: string[];
+  // folders: string[];
   currentFolder: string;
   isLogin: boolean;
 }
@@ -24,7 +24,6 @@ export interface AppStateType {
 export const AppContext = createContext<AppStateType>({} as AppStateType);
 
 // Login State
-
 export enum LoginPage {
   Account = "Account",
   IMAP = "IMAP",

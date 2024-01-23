@@ -8,6 +8,7 @@ export default () => {
 
   useEffect(() => {
     setMail(state.currentMail);
+    console.log(state.currentMail);
   }, [state.currentMail]);
 
   return mail === null ? (
@@ -15,10 +16,11 @@ export default () => {
   ) : (
     <div className="container">
       <div className="bg">
-        <h1>title: {mail.title}</h1>
-        <p>from: {mail.from}</p>
-        <p>to: {mail.to}</p>
-        <h5>body: {mail.body}</h5>
+        <h1>title: {mail.subject}</h1>
+        <p>from: {mail.from?.address}</p>
+        <p>to: {mail.to?.map((c) => c.address)}</p>
+        <div>{mail.raw}</div>
+        <div dangerouslySetInnerHTML={{ __html: mail.html! }} />
       </div>
     </div>
   );

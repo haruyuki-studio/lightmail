@@ -1,20 +1,27 @@
 import { Mail } from "../utils/types";
 import { faker } from "@faker-js/faker";
 
-const folderTypes = ["Github", "Linuxdeepin"];
-const folderKeep = ["Inbox", "Sent", "Drafts", "Trash"];
+// const folderTypes = ["Github", "Linuxdeepin"];
+// const folderKeep = ["Inbox", "Sent", "Drafts", "Trash"];
 
-function createRandomUser() {
+function createRandomUser(): Mail {
   return {
     _id: faker.string.uuid(),
-    title: faker.string.alpha({ length: 20 }),
-    body: faker.string.alpha({ length: 200 }),
+    subject: faker.string.alpha({ length: 20 }),
+    html: faker.string.alpha({ length: 200 }),
     date: faker.date.anytime(),
-    sender: faker.person.fullName(),
-    from: faker.internet.email(),
-    to: Array.from({ length: 5 }, () => faker.internet.email()),
-    folder: faker.helpers.arrayElement<string>(folderTypes.concat(folderKeep)),
-    star: faker.datatype.boolean(),
+    from: {
+      address: faker.internet.email(),
+      raw: "",
+    },
+    to: Array.from({ length: 5 }, () => {
+      return {
+        address: faker.internet.email(),
+        raw: "",
+      };
+    }),
+    // folder: faker.helpers.arrayElement<string>(folderTypes.concat(folderKeep)),
+    // star: faker.datatype.boolean(),
     avatar: faker.image.avatarGitHub(),
   };
 }
@@ -23,32 +30,32 @@ const mails: Mail[] = Array.from({ length: 10 }, () => {
   return createRandomUser();
 });
 
-const folders: string[] = [];
+// const folders: string[] = [];
 
-for (let mail of mails) {
-  let isFound = false;
-  for (let f of folders) {
-    if (f == mail.folder) {
-      isFound = true;
-      break;
-    }
-  }
+// for (let mail of mails) {
+//   let isFound = false;
+//   for (let f of folders) {
+//     if (f == mail.folder) {
+//       isFound = true;
+//       break;
+//     }
+//   }
 
-  if (!isFound) {
-    folders.push(mail.folder);
-  }
-}
+//   if (!isFound) {
+//     folders.push(mail.folder);
+//   }
+// }
 
-folders.sort((a, b) => {
-  if (folderKeep.includes(a) && folderKeep.includes(b)) {
-    return folderKeep.indexOf(a) - folderKeep.indexOf(b);
-  } else if (folderKeep.includes(a)) {
-    return -1;
-  } else if (folderKeep.includes(b)) {
-    return 1;
-  } else {
-    return a === b ? 0 : a < b ? -1 : 1;
-  }
-});
+// folders.sort((a, b) => {
+//   if (folderKeep.includes(a) && folderKeep.includes(b)) {
+//     return folderKeep.indexOf(a) - folderKeep.indexOf(b);
+//   } else if (folderKeep.includes(a)) {
+//     return -1;
+//   } else if (folderKeep.includes(b)) {
+//     return 1;
+//   } else {
+//     return a === b ? 0 : a < b ? -1 : 1;
+//   }
+// });
 
-export { mails, folders };
+export { mails };
